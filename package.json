@@ -7,7 +7,14 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "pod": "cd ios && pod install && cd ..",
+    "clean": "cd android && ./gradlew clean",
+    "codepush:android-s": "appcenter codepush release-react -a WEKURNECT/growtrade-android-qa -d Staging",
+    "codepush:android-p": "appcenter codepush release-react -a WEKURNECT/growtrade-android-qa -d Production",
+    "buildApk": "cd android && ./gradlew app:assembleRelease",
+    "buildDebugApk": "cd android && ./gradlew assembleDebug",
+    "buildAab": "cd android && ./gradlew bundleRelease"
   },
   "dependencies": {
     "react": "18.2.0",
