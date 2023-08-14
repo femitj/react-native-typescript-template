@@ -7,11 +7,21 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "pod": "cd ios && pod install && cd ..",
+    "clean": "cd android && ./gradlew clean",
+    "codepush:android-s": "appcenter codepush release-react -a WEKURNECT/growtrade-android-qa -d Staging",
+    "codepush:android-p": "appcenter codepush release-react -a WEKURNECT/growtrade-android-qa -d Production",
+    "buildApk": "cd android && ./gradlew app:assembleRelease",
+    "buildDebugApk": "cd android && ./gradlew assembleDebug",
+    "buildAab": "cd android && ./gradlew bundleRelease"
   },
   "dependencies": {
+    "@react-navigation/native": "^6.1.7",
     "react": "18.2.0",
-    "react-native": "0.72.3"
+    "react-native": "0.72.3",
+    "react-native-safe-area-context": "^4.7.1",
+    "react-native-screens": "^3.24.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
