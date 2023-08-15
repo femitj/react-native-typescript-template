@@ -1,4 +1,5 @@
 #/bin/bash
+
 YUM_CMD=$(which yum)
 projectName="$1"
 sed -i '' 's/yarn codecov/yarn test/g' package.json
