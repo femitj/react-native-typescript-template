@@ -8,6 +8,8 @@ then
     rm -rf .git CODE_OF_CONDUCT.md CONTRIBUTING.md LICENSE README.md
     yarn
     yarn rename $projectName
+    cd ios && rm -rf Pods && pod install
+else
     echo USAGE
     echo "	$0 <ProjectName>"
 fi
