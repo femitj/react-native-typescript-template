@@ -49,7 +49,7 @@ See below
 - Clone this repo
 
   ```
-  git clone git@github.com:soardigital/klozr-delivery-mobile.git <PROJECT_NAME>
+  git clone https://github.com/femitj/react-native-typescript-template.git <PROJECT_NAME>
 
   ```
 
@@ -68,7 +68,7 @@ See below
 - Clone this repo
 
   ```
-  git clone git@github.com:fxcosta/react-native-typescript-template.git <PROJECT_NAME>
+  git clone https://github.com/femitj/react-native-typescript-template.git <PROJECT_NAME>
   ```
 
   ```
