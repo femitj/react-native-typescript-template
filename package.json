@@ -7,6 +7,8 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
+    "open:ios": "open ./ios/*.xcworkspace",
+    "open:android": "open -a '/Applications/Android Studio.app'",
     "test": "jest",
     "pod": "cd ios && pod install && cd ..",
     "clean": "cd android && ./gradlew clean",
@@ -14,7 +16,9 @@
     "codepush:android-p": "appcenter codepush release-react -a WEKURNECT/growtrade-android-qa -d Production",
     "buildApk": "cd android && ./gradlew app:assembleRelease",
     "buildDebugApk": "cd android && ./gradlew assembleDebug",
-    "buildAab": "cd android && ./gradlew bundleRelease"
+    "buildAab": "cd android && ./gradlew bundleRelease",
+    "rename": "react-native-rename",
+    "setup": "./bin/install.sh $1"
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.7",
@@ -37,6 +41,7 @@
     "jest": "^29.2.1",
     "metro-react-native-babel-preset": "0.76.7",
     "prettier": "^2.4.1",
+    "react-native-rename": "^3.2.13",
     "react-test-renderer": "18.2.0",
     "typescript": "4.8.4"
   },
