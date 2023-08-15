@@ -61,7 +61,7 @@ See below
   ```
     yarn setup <PROJECT_NAME>
   ```
-  > The script will rename, jetify your project, install imagemagick for app-icon generator, change husky pre-push to 'yarn test' instead of 'yarn codecov, delete README, CODE_OF_CONDUCT, CONTRIBUTING and LICENSE'
+  > The script will rename, delete README, CODE_OF_CONDUCT, CONTRIBUTING and LICENSE'
 
 ## Manual Installation
 
