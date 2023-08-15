@@ -43,3 +43,58 @@ See below
 - **Linting**
   - Eslint configured for React Native
   - VSCode Prettier compatible
+
+## Installation
+
+- Clone this repo
+
+  ```
+  git clone git@github.com:soardigital/klozr-delivery-mobile.git <PROJECT_NAME>
+
+  ```
+
+  ```
+  cd <PROJECT_NAME>
+  ```
+
+- Execute the installtion script
+  ```
+    yarn setup <PROJECT_NAME>
+  ```
+  > The script will rename, jetify your project, install imagemagick for app-icon generator, change husky pre-push to 'yarn test' instead of 'yarn codecov, delete README, CODE_OF_CONDUCT, CONTRIBUTING and LICENSE'
+
+## Manual Installation
+
+- Clone this repo
+
+  ```
+  git clone git@github.com:fxcosta/react-native-typescript-template.git <PROJECT_NAME>
+  ```
+
+  ```
+  cd <PROJECT_NAME>
+  ```
+
+- Install dependencies
+  ```
+  yarn
+  ```
+- Rename the project
+
+  ```
+  yarn run rename <PROJECT_NAME>
+  ```
+
+- Migrate to AndroidX to [support React Native 0.60](https://facebook.github.io/react-native/blog/2019/07/03/version-60#androidx-support)
+
+- Update pods
+
+  ```
+  cd ios && pod install
+  ```
+
+- Remove .git
+
+  ```
+  rm -rf .git
+  ```
