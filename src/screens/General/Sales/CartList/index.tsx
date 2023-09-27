@@ -3,45 +3,36 @@ import React, {useState} from 'react';
 import {DeleteIcon} from '../../../../assets/svgs';
 import {currencyFormat} from '../../../../utils/currency';
 import {colors} from '../../../../assets/theme/color';
+import {truncateWords} from '../../../../utils';
 
 interface CartListProps {
   editQuantity: () => void;
-  description: string;
-  name: string;
-  price: number;
   handleRemove: () => void;
-  showItem: boolean;
+  item: any;
 }
 
-const CartList = ({
-  editQuantity,
-  description,
-  name,
-  price,
-  handleRemove,
-  showItem,
-}: CartListProps) => {
-  // const [showItem, hideItem] = useState(false);
+const CartList = ({editQuantity, handleRemove, item}: CartListProps) => {
   return (
     <View>
-      {showItem && (
-        <View style={styles.container}>
-          <View style={[styles.cartItem]}>
-            <Text style={styles.cartItemText}>{description}</Text>
-            <View style={styles.cartItemP}>
-              <Text style={[styles.cartItemText, {marginRight: 5}]}>
-                {currencyFormat(price)}
-              </Text>
-              <Pressable onPress={handleRemove}>
-                <DeleteIcon />
-              </Pressable>
-            </View>
+      <View style={styles.container}>
+        <View style={[styles.cartItem]}>
+          <Text style={styles.cartItemText}>
+            {truncateWords(item.name, {length: 35})}
+          </Text>
+          <View style={styles.cartItemP}>
+            <Text style={[styles.cartItemText, {marginRight: 5}]}>
+              {currencyFormat(item.soldPrice * item.quantity)}
+            </Text>
+            <Pressable onPress={handleRemove}>
+              <DeleteIcon />
+            </Pressable>
           </View>
-          <Pressable onPress={editQuantity}>
-            <Text style={styles.cartItemBT}>Edit Quantity</Text>
-          </Pressable>
         </View>
-      )}
+        <Pressable onPress={editQuantity} style={{flexDirection: 'row'}}>
+          <Text>2 x {item.soldPrice}</Text>
+          <Text style={styles.cartItemBT}>Edit Quantity</Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
@@ -76,7 +67,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 17,
     fontWeight: '500',
-    color: colors.doveGray,
+    // color: colors.doveGray,
   },
   cartItemP: {
     flexDirection: 'row',

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   PixelRatio,
+  TouchableOpacity,
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
@@ -262,6 +263,45 @@ export const Avatar = ({
         ]}
       />
     </Container>
+  );
+};
+
+export const TouchWrap = ({...props}: any) => {
+  return (
+    <TouchableOpacity
+      onPress={props.onPress}
+      disabled={props.disabled}
+      // activeOpacity={0.9}
+      style={[
+        {
+          ...Elevation(props.elevation),
+          opacity: props.opacity,
+          padding: Width(props.padding),
+          paddingTop: Width(props.paddingTop),
+          paddingBottom: Width(props.paddingBottom),
+          paddingLeft: Width(props.paddingLeft),
+          paddingRight: Width(props.paddingRight),
+          paddingVertical: Height(props.paddingVertical),
+          paddingHorizontal: Width(props.paddingHorizontal),
+          flex: props.flex,
+          backgroundColor: props.backgroundColor,
+          borderBottomColor: props.borderBottomColor,
+          borderBottomWidth: Width(props.borderBottomWidth),
+          borderWidth: props.borderWidth,
+          borderLeftWidth: props.borderLeftWidth,
+          borderColor: props.borderColor,
+          borderStyle: props.borderStyle,
+          width: Width(props.width) || props.widthPercent,
+          height: Height(props.height),
+          borderRadius: props.borderRadius,
+          justifyContent: props.verticalAlignment,
+          alignItems: props.horizontalAlignment,
+          marginBottom: Height(props.marginBottom),
+        },
+        props.style,
+      ]}>
+      {props.children}
+    </TouchableOpacity>
   );
 };
 

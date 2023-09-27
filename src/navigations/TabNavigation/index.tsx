@@ -9,11 +9,13 @@ import {MoreTabIcon} from '../../assets/svgs';
 import ServiceTabIcon from '../../assets/svgs/serviceTabIcon';
 import ProfileTabIcon from '../../assets/svgs/profileTabIcon';
 import {
+  ADD_SALES_SCREEN,
   DASHBOARD,
   MORE_SCREEN,
   PROFILE_SCREEN,
   SERVICE_SCREEN,
 } from '../../constants/routeNames';
+import AddSales from '../../screens/General/Sales/AddSales';
 
 const Tab = createBottomTabNavigator();
 
@@ -60,13 +62,13 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={SERVICE_SCREEN}
-        component={Services}
+        name={ADD_SALES_SCREEN}
+        component={AddSales}
         options={{
           headerShown: false,
           tabBarLabel: ({color}) => (
             <Text style={{color, margin: 0, marginBottom: 10, fontSize: 12}}>
-              Services
+              Sales
             </Text>
           ),
           tabBarIcon: ({color}) => <ServiceTabIcon color={color} />,
@@ -86,8 +88,8 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={MORE_SCREEN}
-        component={Home}
+        name={SERVICE_SCREEN}
+        component={Services}
         options={{
           headerShown: false,
           tabBarLabel: ({color}) => (

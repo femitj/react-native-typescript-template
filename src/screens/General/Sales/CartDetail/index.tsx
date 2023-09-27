@@ -1,32 +1,34 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import React, {useContext, useEffect, useState} from 'react';
+import {Pressable, StyleSheet, Text, View, Alert} from 'react-native';
+import {useRoute} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {colors} from '../../../../assets/theme/color';
 import TopNav from '../../../../components/TopNav';
 import {Screen, ScreenList} from '../../../../components/Screens';
-import Button from '../../../../components/CustomButton';
-import Icon from '../../../../components/Icon';
+import CustomButton from '../../../../components/CustomButton';
+import Button from '../../../../components/Button';
 import EmptyData from '../../../../components/EmptyData';
 import CartList from '../CartList';
-import {truncateWords} from '../../../../utils';
-import genStyles from '../../genStyles';
+import {calcSubTotal} from '../../../../utils';
 import {currencyFormat} from '../../../../utils/currency';
 import AddItem from '../AddItem';
 import {useAppDispatch, useAppSelector} from '../../../../hooks';
-import {setCartList, setRemoveCartItem} from '../SaleSlicer/saleSlice';
+import {
+  clearSalesState,
+  setCartList,
+  setRemoveCartItem,
+} from '../SaleSlicer/saleSlice';
+import {HP} from '../../../../utils/devicesize';
+import {usePostSalesOrderMutation} from '../SaleSlicer';
+import useToast from '../../../../hooks/useToast';
+import {ADD_SALES_SCREEN, SALES_SCREEN} from '../../../../constants/routeNames';
+import HandleError from '../../../../utils/errorMsg';
 
-const CartDetail = ({navigation}) => {
-  const {navigate} = useNavigation();
+const CartDetail = ({navigation}: any) => {
+  const toast = useToast();
   const {params} = useRoute();
   const dispatch = useAppDispatch();
   const {cartList} = useAppSelector(state => state.sales);
+  const [postSalesOrder, {isLoading}] = usePostSalesOrderMutation();
   const [addItem, setAddItem] = useState(false);
   const [addMode, setAddMode] = useState(false);
   const [addOther, setAddOther] = useState(false);
@@ -36,21 +38,19 @@ const CartDetail = ({navigation}) => {
     discount: 0,
     total: 0,
   });
-  const [totalAmount, setTotalAmount] = useState(0);
+  // const [totalAmount, setTotalAmount] = useState(0);
   const [fromLocation, setFromLocation] = useState(undefined);
-  const [showItem, hideItem] = useState(false);
 
-  // useEffect(() => {
-  //   setOrderItemList(list);
-  //   const subTotal = calcSubTotal(list);
-  //   const discount = orderItem?.discount || 0;
-  //   const total = subTotal + discount;
-  //   handleCalcBreakdown(subTotal, discount, total);
-  // }, [list]);
+  useEffect(() => {
+    const subTotal = calcSubTotal(cartList);
+    const discount = 0;
+    const total = subTotal + discount;
+    handleCalcBreakdown(subTotal, discount, total);
+  }, [cartList]);
 
   useEffect(() => {
     if (params?.data) {
-      console.log(params?.data?.fromLocation);
+      // console.log(params?.data?.fromLocation);
       setFromLocation(params?.data?.fromLocation);
     }
   }, [params]);
@@ -81,34 +81,9 @@ const CartDetail = ({navigation}) => {
   //   });
   // };
 
-  // const handleDeleteOrder = async () => {
-  //   const id = orderItem.id;
-  //   if (!id) {
-  //     clearGlobalState();
-  //     navigation.goBack();
-  //     return;
-  //   }
-  //   const res = await httpDeleteOrder(id);
-  //   if (res.status) {
-  //     setActionLoading(false);
-  //     // navigate to orders
-  //     setNavigateTo(fromLocation);
-  //     setModalObj({
-  //       title: 'Delete order',
-  //       description: 'Your order has been successfully deleted',
-  //       btnText: 'Continue',
-  //     });
-  //     setShowModal(true);
-  //   } else {
-  //     setNavigateTo('error');
-  //     setModalObj({
-  //       title: 'Delete order',
-  //       description: res.message,
-  //       btnText: 'Go back',
-  //     });
-  //     setShowModal(true);
-  //   }
-  // };
+  const handleDeleteOrder = () => {
+    clearCartState();
+  };
 
   const handleAddMoreQuantity = (soldPrice: string, quantity: number) => {
     setAddItem(!addItem);
@@ -117,7 +92,11 @@ const CartDetail = ({navigation}) => {
     dispatch(setCartList({...selected, quantity, soldPrice})); // add item back after editing
   };
 
-  const handleCalcBreakdown = (subTotal, discount, total) => {
+  const handleCalcBreakdown = (
+    subTotal: number,
+    discount: number,
+    total: number,
+  ) => {
     setBreakdown({
       subTotal,
       discount,
@@ -125,12 +104,53 @@ const CartDetail = ({navigation}) => {
     });
   };
 
-  const clearGlobalState = () => {
-    // handleAddCartItem([])(cartDispatch);
+  const clearCartState = () => {
+    dispatch(clearSalesState());
+  };
+
+  const handleSubmit = async () => {
+    try {
+      //   {
+      //     "paymentMethod": "Transfer",
+      //     "totalAmount": 5000.00,
+      //     "selectedProduct": [
+      //         {
+      //             "productId": "9acd850f-46d7-483b-9648-6b08a6442ad2",
+      //             "quantity": 3,
+      //             "soldPrice": 5000.00
+      //         }
+      //     ]
+      // }
+      const data = {
+        paymentMethod: 'Cash',
+        totalAmount: breakdown.total,
+        selectedProduct: cartList,
+      };
+      const res = await postSalesOrder(data).unwrap();
+      if (res?.status) {
+        toast.show(res.message, {
+          placement: 'top',
+          duration: 4000,
+          animationType: 'slide-in',
+          type: 'success',
+        });
+        clearCartState();
+        navigation.navigate(ADD_SALES_SCREEN);
+      }
+    } catch (error: any) {
+      const err = HandleError(error);
+      toast.show(err, {
+        placement: 'top',
+        duration: 4000,
+        animationType: 'slide-in',
+        type: 'danger',
+      });
+    }
   };
 
   return (
     <Screen
+      isFixed={true}
       paddingHorizontal={0}
       paddingVertical={0}
       backgroundColor={colors.white}>
@@ -149,7 +169,7 @@ const CartDetail = ({navigation}) => {
               style={{
                 width: '48%',
               }}>
-              <Button
+              <CustomButton
                 backgroundColor="rgba(255, 103, 103, 0.05)"
                 color={colors.bittersweet}
                 bordered
@@ -168,7 +188,7 @@ const CartDetail = ({navigation}) => {
                       },
                       {
                         text: 'OK',
-                        onPress: () => {},
+                        onPress: () => handleDeleteOrder(),
                       },
                     ],
                   );
@@ -179,7 +199,7 @@ const CartDetail = ({navigation}) => {
               style={{
                 width: '48%',
               }}>
-              <Button
+              <CustomButton
                 backgroundColor="rgba(41, 191, 106, 0.05)"
                 content="Add Item"
                 bordered
@@ -197,35 +217,23 @@ const CartDetail = ({navigation}) => {
               <Text style={styles.otLeft}>Your Order</Text>
               <View style={styles.otRight} />
             </View>
-            <TouchableOpacity
-              style={[styles.title, {marginBottom: 18}]}
-              onPress={() => hideItem(!showItem)}>
-              {/* <Text>{sellerName}</Text> */}
-              <Icon
-                type="fa"
-                name={showItem ? 'angle-up' : 'angle-down'}
-                size={24}
-              />
-            </TouchableOpacity>
 
-            <View style={genStyles.itemList}>
+            <View style={{height: HP(35)}}>
               <ScreenList
                 onRefresh={() => {}}
-                data={[]}
+                refreshing={false}
+                data={cartList}
                 ListEmptyComponent={<EmptyData message="No item found" />}
                 renderItem={({item, index}: any) => (
                   <CartList
-                    key={`${item.name}-${Math.random().toString()}`}
-                    name=""
-                    description={truncateWords(item.description, {length: 35})}
-                    price={item.unitPrice * item.quantity}
+                    key={`${Math.random().toString()}`}
                     editQuantity={() => {
                       setSelected({...item, orderIndex: index});
                       setAddItem(true);
                       setAddMode(false);
                     }}
                     handleRemove={() => {}}
-                    showItem={showItem}
+                    item={item}
                   />
                 )}
               />
@@ -238,6 +246,7 @@ const CartDetail = ({navigation}) => {
                 <Text style={styles.addMore}>+ Add to this order</Text>
               </Pressable>
             </View>
+
             <View>
               <View style={[styles.title, {marginBottom: 16}]}>
                 <Text style={styles.noTl}>
@@ -272,9 +281,9 @@ const CartDetail = ({navigation}) => {
             <Text style={styles.odOrderNo}>Total</Text>
             <Text>{currencyFormat(breakdown.total)}</Text>
           </View>
-          <Pressable onPress={() => {}}>
+          {/* <Pressable onPress={() => {}}>
             <Text style={styles.save}>Save for later</Text>
-          </Pressable>
+          </Pressable> */}
 
           <View
             style={{
@@ -287,21 +296,24 @@ const CartDetail = ({navigation}) => {
                 marginRight: 10,
               }}>
               <Button
-                content="Place Order & Pay"
-                backgroundColor="#29BF6A"
-                color={colors.white}
-                onPress={() => {}}
-              />
+                disabled={true}
+                buttonColor={colors.primary}
+                textColor={colors.white}
+                onPress={() => {}}>
+                Save for later
+              </Button>
             </View>
             <View
               style={{
                 flexGrow: 1,
               }}>
-              <Button
-                content="Place Order"
-                backgroundColor={colors.primary}
+              <CustomButton
+                content="Place Order & Pay"
+                backgroundColor="#29BF6A"
                 color={colors.white}
-                onPress={() => {}}
+                onPress={handleSubmit}
+                loading={isLoading}
+                disabled={isLoading}
               />
             </View>
           </View>
@@ -361,7 +373,7 @@ const styles = StyleSheet.create({
   orderTitle: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 25,
+    paddingTop: 20,
     marginBottom: 16,
   },
   otLeft: {
@@ -406,12 +418,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   orderDetailWrapper: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 11,
-    },
-    shadowOpacity: 0.55,
-    shadowRadius: 14.78,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 11,
+    // },
+    // shadowOpacity: 0.55,
+    // shadowRadius: 14.78,
   },
 });

@@ -5,9 +5,11 @@ import {
   ADD_CATEGORY_SCREEN,
   ADD_PRODUCT_SCREEN,
   ADD_SALES_SCREEN,
+  CART_CHECKOUT_SCREEN,
   CATEGORY_SCREEN,
   DASHBOARD,
   PRODUCT_SCREEN,
+  SALES_SCREEN,
   SERVICE_SCREEN,
 } from '../../constants/routeNames';
 import Home from '../../screens/General/Home';
@@ -17,6 +19,8 @@ import AddCategory from '../../screens/General/Category/AddCategory';
 import Products from '../../screens/General/Products';
 import AddProduct from '../../screens/General/Products/AddProduct';
 import AddSales from '../../screens/General/Sales/AddSales';
+import ViewSales from '../../screens/General/Sales';
+import CartDetail from '../../screens/General/Sales/CartDetail';
 
 interface Props {
   title?: string;
@@ -60,6 +64,16 @@ const GeneralNavigator = ({}: Props) => {
       <GeneralStack.Screen
         name={ADD_SALES_SCREEN}
         component={AddSales}
+        options={{headerShown: false}}
+      />
+      <GeneralStack.Screen
+        name={CART_CHECKOUT_SCREEN}
+        component={CartDetail}
+        options={{headerShown: false}}
+      />
+      <GeneralStack.Screen
+        name={SALES_SCREEN}
+        component={ViewSales}
         options={{headerShown: false}}
       />
     </GeneralStack.Navigator>

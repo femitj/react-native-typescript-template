@@ -18,11 +18,11 @@ export const SalesSlicer = createSlice({
       );
       state.cartList = newList;
     },
-    clearGeneralState: () => initialState,
+    clearSalesState: () => initialState,
   },
 });
 
-export const {clearGeneralState, setCartList, setRemoveCartItem} =
+export const {clearSalesState, setCartList, setRemoveCartItem} =
   SalesSlicer.actions;
 
 export default SalesSlicer.reducer;

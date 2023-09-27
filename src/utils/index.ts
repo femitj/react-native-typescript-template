@@ -1,4 +1,5 @@
 import {truncate} from 'lodash';
+import moment from 'moment';
 
 export const truncateWords = (str: string, options?: any) => {
   const newOptions = {
@@ -21,4 +22,8 @@ export const calcSubTotal = (list: any) => {
     0,
   );
   return sum;
+};
+
+export const formatDate = (date: any, dateFormat: string) => {
+  return date ? moment(`${date}`).format(dateFormat) : 'N/A';
 };

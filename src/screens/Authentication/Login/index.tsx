@@ -19,8 +19,11 @@ import {SizedBox} from '../../../components/SizedBox';
 import CustomButton from '../../../components/Button';
 import {useSignInUserMutation} from '../AuthSlicer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useToast from '../../../hooks/useToast';
+import HandleError from '../../../utils/errorMsg';
 
 const Index = ({navigation}: any) => {
+  const toast = useToast();
   const [signInUser, {isLoading}] = useSignInUserMutation();
   const dispatch = useAppDispatch();
   const [data, setData] = useState({
@@ -54,7 +57,16 @@ const Index = ({navigation}: any) => {
           }),
         );
       }
-    } catch (err) {}
+    } catch (error) {
+      console.log('gets here', error);
+      const err = HandleError(error);
+      toast.show(err, {
+        placement: 'top',
+        duration: 4000,
+        animationType: 'slide-in',
+        type: 'danger',
+      });
+    }
   };
 
   return (

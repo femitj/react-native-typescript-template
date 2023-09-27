@@ -14,8 +14,8 @@ type NavToggleProps = {
 
 const NavToggle = ({showIcon = true}: NavToggleProps) => {
   const {toggleDrawer, navigate} = useNavigation<any>();
-  const notificationCount = 2;
-  const broadcastCount = 2;
+  const notificationCount = 0;
+  const broadcastCount = 0;
 
   return (
     <View
@@ -34,7 +34,7 @@ const NavToggle = ({showIcon = true}: NavToggleProps) => {
       {showIcon && (
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
-            onPress={() => navigate(BROADCAST_MESSAGES)}
+            onPress={() => {}}
             style={{
               marginRight: 10,
               paddingLeft: 10,
@@ -52,7 +52,7 @@ const NavToggle = ({showIcon = true}: NavToggleProps) => {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigate(NOTIFICATIONS)}
+            onPress={() => {}}
             style={{
               // backgroundColor: 'green',
               paddingTop: 10,

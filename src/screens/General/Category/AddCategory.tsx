@@ -11,6 +11,7 @@ import genStyles from '../genStyles';
 import useToast from '../../../hooks/useToast';
 import {usePostCategoriesMutation} from '../GeneralSlicer';
 import {CATEGORY_SCREEN} from '../../../constants/routeNames';
+import HandleError from '../../../utils/errorMsg';
 
 interface AddCategoryProps {
   navigation: any;
@@ -23,6 +24,7 @@ const AddCategory = ({navigation}: AddCategoryProps) => {
   const [data, setData] = useState<ICategory>({
     title: '',
     description: '',
+    code: '',
   });
 
   const handleSubmit = async () => {
@@ -39,7 +41,8 @@ const AddCategory = ({navigation}: AddCategoryProps) => {
         navigation.navigate(CATEGORY_SCREEN);
       }
     } catch (error: any) {
-      toast.show(error.data.message, {
+      const err = HandleError(error);
+      toast.show(err, {
         placement: 'top',
         duration: 4000,
         animationType: 'slide-in',
@@ -95,6 +98,18 @@ const AddCategory = ({navigation}: AddCategoryProps) => {
             }}
             error={errors?.description || false}
             message={errors?.description || null}
+          />
+        </View>
+
+        <View style={{}}>
+          <CustomInput
+            label="Code"
+            value={data.code}
+            onChangeText={value => {
+              onChange({name: 'code', value});
+            }}
+            error={errors?.code || false}
+            message={errors?.code || null}
           />
         </View>
 
