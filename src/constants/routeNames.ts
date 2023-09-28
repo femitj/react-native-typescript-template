@@ -26,6 +26,7 @@ export const ADD_PRODUCT_SCREEN = 'Add Product Order';
 
 // Sales Purchase
 export const SALES_SCREEN = 'Sales Order';
+export const SALES_PRODUCT_ITEMS_SCREEN = 'Sales Product Items Order';
 export const VIEW_SALES = 'View Sales Order';
 export const ADD_SALES_SCREEN = 'Add Sales Order';
 export const CART_CHECKOUT_SCREEN = 'Cart Checkout Screen';

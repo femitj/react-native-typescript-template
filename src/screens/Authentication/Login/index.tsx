@@ -162,7 +162,7 @@ const Index = ({navigation}: any) => {
             buttonColor="rgba(235, 148, 129, 0.25)"
             style={{width: '100%', paddingVertical: 8}}
             onPress={handleSubmit}
-            // disabled={!canSubmit}
+            disabled={isLoading}
             loading={isLoading}>
             Log In
           </CustomButton>

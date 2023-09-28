@@ -24,6 +24,7 @@ import Icon from '../../components/Icon';
 import {SizedBox} from '../../components/SizedBox';
 import {Avatar, Container} from '../../components/Wrappers';
 import {placeholderImage} from '../../assets/images';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SideMenu = ({navigation, authDispatch, authState, userInfo}: any) => {
   const dispatch = useAppDispatch();
@@ -39,6 +40,7 @@ const SideMenu = ({navigation, authDispatch, authState, userInfo}: any) => {
       {
         text: 'OK',
         onPress: () => {
+          AsyncStorage.removeItem('token');
           dispatch(logOutUser());
           // logoutUser()(authDispatch);
           // navigation.navigate(LOGOUT);

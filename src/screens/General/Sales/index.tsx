@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import EmptyData from '../../../components/EmptyData';
 import Pagination from '../../../components/Pagination';
@@ -8,6 +8,7 @@ import NavToggle from '../../../components/TopNav/NavToggle';
 import {colors} from '../../../assets/theme/color';
 import genStyles from '../genStyles';
 import {useGetSalesOrderQuery} from './SaleSlicer';
+import {SALES_PRODUCT_ITEMS_SCREEN} from '../../../constants/routeNames';
 
 const Index = ({navigation}: any) => {
   const {currentData, isFetching, refetch} = useGetSalesOrderQuery();
@@ -20,6 +21,13 @@ const Index = ({navigation}: any) => {
   });
 
   // console.log('>>>>>', isFetching, currentData?.data);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refetch();
+    });
+    return unsubscribe;
+  }, [navigation, refetch]);
 
   return (
     <Screen
@@ -43,9 +51,12 @@ const Index = ({navigation}: any) => {
           }}
           refreshing={isFetching}
           data={currentData?.data}
-          ListEmptyComponent={<EmptyData message="No category found" />}
+          ListEmptyComponent={<EmptyData message="No sales found" />}
           renderItem={({item}: any) => (
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate(SALES_PRODUCT_ITEMS_SCREEN, {id: item.id})
+              }>
               <View style={genStyles.item}>
                 <View
                   style={{

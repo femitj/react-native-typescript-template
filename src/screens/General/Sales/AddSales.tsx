@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import EmptyData from '../../../components/EmptyData';
 import {Screen, ScreenList} from '../../../components/Screens';
@@ -40,11 +40,14 @@ const AddSales = ({navigation}: any) => {
     setSelected({...selected, quantity, soldPrice});
     setAddItem(!addItem);
     dispatch(setCartList({...selected, quantity, soldPrice}));
-    // setCartList([...cart, {...selected, quantity, soldPrice}]);
-    // handleAddCartItem([...cart, {...selected, quantity, soldPrice}])(
-    //   cartDispatch,
-    // );
   };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refetch();
+    });
+    return unsubscribe;
+  }, [navigation, refetch]);
 
   return (
     <Screen

@@ -9,6 +9,7 @@ import {
   CATEGORY_SCREEN,
   DASHBOARD,
   PRODUCT_SCREEN,
+  SALES_PRODUCT_ITEMS_SCREEN,
   SALES_SCREEN,
   SERVICE_SCREEN,
 } from '../../constants/routeNames';
@@ -21,6 +22,7 @@ import AddProduct from '../../screens/General/Products/AddProduct';
 import AddSales from '../../screens/General/Sales/AddSales';
 import ViewSales from '../../screens/General/Sales';
 import CartDetail from '../../screens/General/Sales/CartDetail';
+import SaleProducts from '../../screens/General/Sales/SaleProducts';
 
 interface Props {
   title?: string;
@@ -74,6 +76,11 @@ const GeneralNavigator = ({}: Props) => {
       <GeneralStack.Screen
         name={SALES_SCREEN}
         component={ViewSales}
+        options={{headerShown: false}}
+      />
+      <GeneralStack.Screen
+        name={SALES_PRODUCT_ITEMS_SCREEN}
+        component={SaleProducts}
         options={{headerShown: false}}
       />
     </GeneralStack.Navigator>
