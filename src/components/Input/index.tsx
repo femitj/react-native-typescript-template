@@ -37,7 +37,7 @@ const CustomInput: FC<CustomInputProps> = ({
   wrapperStyle,
   inputStyle,
   placeholderTextColor,
-  color,
+  color = colors.black,
   editable = true,
   labelColor,
   height,

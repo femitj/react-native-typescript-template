@@ -1,6 +1,6 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {RootState} from '../store';
-import env from '../config/env';
+// import env from '../config/env';
 
 export enum APIStatus {
   IDLE,
@@ -16,7 +16,8 @@ export interface APIError {
   status?: any;
 }
 
-export const {BACKEND_URL: customBaseUrl} = env;
+// export const {BACKEND_URL: customBaseUrl} = env;
+const customBaseUrl = 'https://gima-backend.onrender.com';
 
 export const apiSlice = createApi({
   reducerPath: 'api',
